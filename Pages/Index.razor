@@ -1,0 +1,40 @@
+﻿@page "/"
+@using Actividad1.conversion
+@inject ConversionInfijaPostfija ConvertirService
+
+<h3>Conversión de Expresión Infija a Postfija</h3>
+
+<div>
+    <label>Ingrese una expresión Infija:</label>
+    <input @bind="expresionInfija" style="margin-right: 10px;" />
+
+    <button @onclick="Convertir" style="background-color: deeppink; color: white; border: none; padding: 5px 10px; border-radius: 5px;">
+        Convertir a Postfija
+    </button>
+</div>
+
+<hr />
+
+<h4 style="color: deeppink; display: inline;">Expresión Postfija:</h4>
+<p style="font-size: 1.5rem; font-weight: bold; color: black; display: inline; margin-left: 10px;">@expresionPostfija</p>
+
+@code {
+    private string expresionInfija = "";
+    private string expresionPostfija = "";
+
+    protected override void OnInitialized()
+    {
+        ConvertirService.OnOutputChanged += () =>
+        {
+            expresionPostfija = ConvertirService.Output;
+            StateHasChanged();
+        };
+    }
+
+    private void Convertir()
+    {
+        expresionPostfija = "";
+        ConvertirService.ConvertirInfijaAPostfija(expresionInfija);
+        StateHasChanged();
+    }
+}
